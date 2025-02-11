@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include  '../models/db.php';
 
 $id = $_GET['id'] ?? null;
 if ($id) {
@@ -7,5 +7,5 @@ if ($id) {
     $stmt->execute(['id' => $id]);
 }
 
-header("Location: index.php");
+header("Location: http://localhost:8000/index.php");
 ?>

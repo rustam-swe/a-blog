@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-include 'db.php';
+include  '../models/db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $title = $_POST['title'];
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $db->prepare("INSERT INTO posts (title, text,user_id,status) VALUES (:title, :text, :user_id, :status)");
     $stmt->execute(['title' => $title, 'text' => $text, 'user_id'=> $user_id,'status'=>$status]);
 
-    header("Location: index.php");
+    header("Location: http://localhost:8000/index.php");
 }
 ?>
 

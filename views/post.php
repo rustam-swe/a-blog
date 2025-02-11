@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include  '../models/db.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) die("Post not found!");

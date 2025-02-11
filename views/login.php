@@ -1,6 +1,7 @@
 <?php
 session_start();
-require 'db.php';
+include  '../models/db.php';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -11,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user && password_verify($password, $user['password'])) {
         $_SESSION['user'] = $user;
-        header("Location: index.php");
+        header("Location:http://localhost:8000/index.php");
         exit;
     } else {
         $_SESSION['error'] = "Email yoki parol noto‘g‘ri!";

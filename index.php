@@ -1,11 +1,11 @@
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+    header("Location: views/login.php");
     exit;
 }
 
-include 'db.php';
+include './models/db.php';
 
 $stmt = $db->query("SELECT * 
         FROM posts 
@@ -71,14 +71,14 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h1 class="center">Personal Blog</h1>
     <div class="container">
         <div class="links">
-             <a class="add_post" href="create.php">Add new post</a>
-             <a class="add_post" href="my_posts.php">My posts</a>
+             <a class="add_post" href="views/create.php">Add new post</a>
+             <a class="add_post" href="views/my_posts.php">My posts</a>
         </div>
       
         <?php foreach ($posts as $post): ?>
             <div class="blog">
         <h3>
-            <a class="h3" href="post.php?id=<?= $post['id'] ?>">
+            <a class="h3" href="views/post.php?id=<?= $post['id'] ?>">
                 <?= htmlspecialchars($post['title']) ?>
             </a>
         </h3>

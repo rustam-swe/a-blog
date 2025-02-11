@@ -1,5 +1,5 @@
 <?php
-include 'db.php';
+include  '../models/db.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) die("Post not found!");
@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $db->prepare("UPDATE posts SET title = :title, text = :text, status = :status WHERE id = :id");
     $stmt->execute(['title' => $title, 'text' => $text, 'id' => $id,'status'=> $status]);
    
-    header("Location: index.php");
+    header("Location: http://localhost:8000/index.php");
 }
 ?>
 
