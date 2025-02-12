@@ -1,6 +1,8 @@
 <?php
+require "credentials.php";
+
 try {
-    $db = new PDO("mysql:host=localhost;dbname=personal_blog","root", "root1223");
+    $db = new PDO("mysql:host=localhost;dbname=$database",$dbUser, $dbPassword);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // echo "Ulandi";
 } catch (PDOException $e) {

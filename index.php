@@ -1,17 +1,21 @@
 <?php
+// include 'controllers/post_controller.php';
+include './models/db.php';
+
 session_start();
+
 if (!isset($_SESSION['user'])) {
     header("Location: views/login.php");
     exit;
 }
 
-include './models/db.php';
 
 $stmt = $db->query("SELECT * 
         FROM posts 
         WHERE status = 'published'
         ORDER BY created_at DESC");
 $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -87,8 +91,12 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <span><i><?=$post['updated_at']?></i></span>
         <p><?= nl2br(htmlspecialchars(substr($post['text'], 0, 100))) ?>...</p>
         <?php if($_SESSION['user']['id'] == $post['user_id']){ ?>
-        <a class="edit" href="edit.php?id=<?= $post['id'] ?>">edit</a>
-        <a class="delete" href="delete.php?id=<?= $post['id'] ?>" onclick="return confirm('Do you want to delete?')">delete</a>
+        <a class="edit" href="views/edit.php?id=<?= $post['id'] ?>">edit</a>
+        <form method="post" action="controllers/post_controller.php" style="display:inline;">
+    <input type="hidden" name="delete_id" value="<?= $post['id'] ?>">
+    <button class="delete" type="submit" onclick="return confirm('Do you want to delete?')">Delete</button>
+    </form>
+
         <?php };?>
         </div>
 

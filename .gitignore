@@ -1,3 +1,4 @@
 .vscode
 .ide
 .DS_Store
+models/credentials.php

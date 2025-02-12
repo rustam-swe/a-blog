@@ -1,5 +1,8 @@
 <?php
-include  '../models/db.php';
+session_start();
+
+// include  '../models/db.php';
+require '../controllers/post_controller.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) die("Post not found!");
@@ -8,15 +11,14 @@ $stmt = $db->prepare("SELECT * FROM posts WHERE id = :id");
 $stmt->execute(['id' => $id]);
 $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = $_POST['title'];
-    $text = $_POST['text'];
-    $status = $_POST['status'];
 
-    $stmt = $db->prepare("UPDATE posts SET title = :title, text = :text, status = :status WHERE id = :id");
-    $stmt->execute(['title' => $title, 'text' => $text, 'id' => $id,'status'=> $status]);
-   
-    header("Location: http://localhost:8000/index.php");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // var_dump('tugadi');
+
+    if (isset($_POST['title'], $_POST['text'], $_POST['status']) && isset($_SESSION['user']['id'])) {
+        // var_dump($id);
+        edit($_POST['title'], $_POST['text'],  $id , $_POST['status']);
+    }
 }
 ?>
 
@@ -28,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h1>Edit post</h1>
-    <form method="post">
+    <form method="POST">
         <input type="text" name="title" value="<?= htmlspecialchars($post['title']) ?>" required><br>
         <textarea name="text" required><?= htmlspecialchars($post['text']) ?></textarea><br>
         <select name="status">

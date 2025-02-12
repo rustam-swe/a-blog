@@ -1,22 +1,16 @@
-<?php
+<?php 
+
+require '../controllers/post_controller.php';
 session_start();
 
-include  '../models/db.php';
-
+// Agar POST so‘rovi kelgan bo‘lsa, createPost() ni chaqiramiz
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $title = $_POST['title'];
-    $text = $_POST['text'];
-    $user_id = $_SESSION['user']['id'];
-    $status = $_POST['status'];
-
-    // var_dump($status);
-    $stmt = $db->prepare("INSERT INTO posts (title, text,user_id,status) VALUES (:title, :text, :user_id, :status)");
-    $stmt->execute(['title' => $title, 'text' => $text, 'user_id'=> $user_id,'status'=>$status]);
-
-    header("Location: http://localhost:8000/index.php");
+    if (isset($_POST['title'], $_POST['text'], $_POST['status']) && isset($_SESSION['user']['id'])) {
+        // var_dump($_POST['title']);
+        createPost($_POST['title'], $_POST['text'], $_SESSION['user']['id'], $_POST['status']);
+    }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,15 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h1>Add new post</h1>
-    <form method="post">
-        <input type="text" name="title" placeholder="title" required><br>
-        <textarea name="text" placeholder="text" required></textarea><br>
-        <label for="status">status: </label>
+    <form method="post" action="">
+        <input type="text" name="title" placeholder="Title" required><br>
+        <textarea name="text" placeholder="Text" required></textarea><br>
+        <label for="status">Status: </label>
         <select name="status">
             <option value="drafted">Drafted</option>
             <option value="published">Published</option>
         </select><br><br>
-        <button type="submit">submit</button>
+        <button type="submit">Submit</button>
     </form>
 </body>
 </html>
