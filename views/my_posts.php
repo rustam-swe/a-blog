@@ -21,48 +21,7 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <title>Personal Blog</title>
-    <style>
-        .center{
-            text-align:center;
-        }
-        .container{
-            width: 85%;
-            margin: auto;
-        }
-        .blog{
-            border: 1px solid blue;
-            margin: 20px;
-            padding:20px;
-        }
-        .h3{
-            color:green;
-            text-decoration: none;
-        }
-        .add_post{
-            text-decoration:none;
-            color: white;
-            background-color: blue;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: 900;
-        }
-        .edit{
-            text-decoration:none;
-            color:black;
-            background-color:yellow;
-            padding:5px;
-            border-radius:10px;
-            font-weight:200;
-        }
-        .delete{
-            text-decoration:none;
-            color:black;
-            background-color:red;
-            padding:5px;
-            border-radius:10px;
-            font-weight:200;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/my_posts.css">
 </head>
 <body>
     <h1 class="center">Personal Blog</h1>

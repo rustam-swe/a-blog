@@ -1,21 +1,29 @@
 <?php
 
-include __DIR__ . '/../db.php';
+require __DIR__ . '/../models/db.php';
 
+try {
+    // Users jadvalini yaratish
+    $db->exec("CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(64) NOT NULL,
+        email VARCHAR(128) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL
+    )");
 
-$stmt = $db->prepare("CREATE TABLE IF NOT EXISTS posts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(64) DEFAULT NULL,
-    text TEXT DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)");
+    // Posts jadvalini yaratish
+    $db->exec("CREATE TABLE IF NOT EXISTS posts (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        title VARCHAR(64) DEFAULT NULL,
+        text TEXT DEFAULT NULL,
+        user_id INT NOT NULL,
+        status ENUM('published', 'drafted') NOT NULL DEFAULT 'drafted',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    )");
 
-$stmt->execute();
-
-// Added updated_at column
-
-$stmt = $db->prepare("ALTER TABLE posts ADD updated_at TIMESTAMP DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP");
-$stmt->execute();
-
-echo "Table created successfully\n";
-?>
+    echo "The Users and Posts tables have been successfully created.!";
+} catch (PDOException $e) {
+    die("Xatolik: " . $e->getMessage());
+}
