@@ -1,5 +1,5 @@
 <?php
-require  '../models/db.php';
+require __DIR__.'/../models/db.php';
 
 $fetchPost = function($id) use ($db) {
     $stmt = $db->prepare("SELECT * FROM posts WHERE id = :id");
@@ -94,3 +94,15 @@ function registerUser($name, $email, $password) {
         exit;
     }
 }
+
+$searchPosts = function($searchPhrase) use ($db){
+  $query = "SELECT * FROM posts WHERE title LIKE :searchPhrase";
+  $stmt = $db->prepare($query);
+  $stmt->execute([':searchPhrase'=>"%$searchPhrase%"]);
+  return $stmt->fetchAll();
+};
+
+$fetchPosts = function() use ($db) {
+  $stmt = $db->query("SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC");
+  return $stmt->fetchAll();
+};
