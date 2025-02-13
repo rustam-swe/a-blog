@@ -1,6 +1,6 @@
 <?php
 require "../controllers/post_controller.php";
-$id = $_GET['id'];
+$id = $_GET['id'] ?? '';
 $post = $fetchPost($id);
 ?>
 
