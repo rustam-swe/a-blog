@@ -24,6 +24,8 @@ function createPost($title, $text, $user_id, $status) {
     header("Location: http://localhost:8000/index.php");
     exit;
 };
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     // var_dump($_POST);
     delete($_POST['delete_id']);
@@ -31,8 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
 
 function delete($id){
     global $db;
-
-    // Postni faqat o‘zining egasi o‘chira olishi kerak
     $stmt = $db->prepare("DELETE FROM posts WHERE id = :id");
     $stmt->execute(['id' => $id]);
 
@@ -43,7 +43,6 @@ function delete($id){
 }
 
 
-
 function edit($title, $text, $id, $status){
     global $db;
 
@@ -52,4 +51,45 @@ function edit($title, $text, $id, $status){
    
     header("Location: http://localhost:8000/index.php");
     exit();
+}
+
+
+function loginUser($email, $password) {
+    global $db;
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+        $_SESSION['user'] = $user;
+        header("Location: http://localhost:8000/index.php");
+        exit;
+    } else {
+        $_SESSION['error'] = "Incorrect email or password!";
+    }
+}
+
+
+function registerUser($name, $email, $password) {
+    global $db;
+
+    // Email mavjudligini tekshiramiz
+    $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+
+    if ($stmt->fetch()) {
+        $_SESSION['error'] = "This email is already registered.!";
+    } else {
+        // Parolni hash qilish
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Ma'lumotlar bazasiga qo‘shish
+        $stmt = $db->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+        $stmt->execute([$name, $email, $hashedPassword]);
+
+        $_SESSION['success'] = "You have successfully registered.!";
+        header("Location: login.php");
+        exit;
+    }
 }
