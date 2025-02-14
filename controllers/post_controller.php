@@ -95,14 +95,21 @@ function registerUser($name, $email, $password) {
     }
 }
 
-$searchPosts = function($searchPhrase) use ($db){
-  $query = "SELECT * FROM posts WHERE title LIKE :searchPhrase";
+$searchPosts = function($searchPhrase, $status) use ($db){
+  $query = "SELECT * FROM posts WHERE title LIKE :searchPhrase AND status LIKE :status";
+
+  $params = [
+    ":searchPhrase" => "%$searchPhrase%", 
+    ":status" => "%$status%"
+  ];
+
   $stmt = $db->prepare($query);
-  $stmt->execute([':searchPhrase'=>"%$searchPhrase%"]);
+  $stmt->execute($params);
+
   return $stmt->fetchAll();
 };
 
 $fetchPosts = function() use ($db) {
-  $stmt = $db->query("SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC");
+  $stmt = $db->query("SELECT * FROM posts ORDER BY created_at DESC");
   return $stmt->fetchAll();
 };

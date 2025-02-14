@@ -9,8 +9,9 @@ if (!isset($_SESSION['user'])) {
 }
 
 $searchPhrase = $_GET['search'] ?? '';
+$status = $_GET['status'] ?? '';
 
-$posts = $searchPhrase ? $searchPosts($searchPhrase) : $fetchPosts();
+$posts = $searchPhrase || $status ? $searchPosts($searchPhrase, $status) : $fetchPosts();
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +28,13 @@ $posts = $searchPhrase ? $searchPosts($searchPhrase) : $fetchPosts();
         <div class="links">
             <a class="add_post" href="views/create.php">Add new post</a>
             <form action="" method="get">
-                <input type="text" name="search" placeholder="Search">
+            <input type="text" name="search" placeholder="Search" value="<?= $_GET['search'] ?? ''?>">
+                <select name="status">
+                <option value=''>All</option>
+                <option value='published' <?= $_GET['status'] =='published' ? 'selected' : ''?>>Published</option>
+                <option value='drafted' <?= $_GET['status'] == 'drafted' ? 'selected' : ''?>>Drafted</option>
+                </select>
+                <button type="submit">Search</button>
             </form>
             <a class="add_post" href="views/my_posts.php">My posts</a>
             <a class="add_post" href="views/logout.php">Exit</a>
